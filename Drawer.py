@@ -3,12 +3,12 @@ import pygame
 
 class Drawer(object):
 
-	def __init__(self, DISPLAYSURF, configParser):
-		self.DISPLAYSURF = DISPLAYSURF
+	def __init__(self, configParser):
+		self.configParser = configParser
 
-	def fill(self, colour = False):
+	def fill(self, DISPLAYSURF, colour = False):
 		if colour == False:
 			colour = Colours.BACKGROUND
 
-		self.DISPLAYSURF.fill(colour)
+		DISPLAYSURF.fill(colour)
 

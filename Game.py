@@ -1,10 +1,10 @@
 import profile
 import sys
 from Logger import Logger
-from Controller import Controller
+from GameController import GameController
 
 if __name__ == '__main__':
 	sys.stdout = Logger()
-	controller = Controller()
+	gameController = GameController()
 	#profile.run('game.main()')
-	controller.main()
+	gameController.main()
