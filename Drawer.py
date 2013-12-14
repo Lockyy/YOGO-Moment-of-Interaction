@@ -3,8 +3,8 @@ import pygame
 
 class Drawer(object):
 
-	def __init__(self, configParser):
-		self.configParser = configParser
+	def __init__(self, configManager):
+		self.configManager = configManager
 
 	def fill(self, DISPLAYSURF, colour = False):
 		if colour == False:

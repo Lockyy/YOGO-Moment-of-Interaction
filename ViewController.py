@@ -5,40 +5,23 @@ from SidebarView import SidebarView
 
 class ViewController(object):
 
-	SIDEBARWIDTH 	= 300
-	MINIMUMWIDTH 	= 1280
-	MINIMUMHEIGHT 	= 800
-
-	def __init__(self, configParser):
-		self.configParser = configParser
+	def __init__(self, configManager):
+		self.configManager = configManager
 
 		pygame.init()
 
 		self.setupWindow()
 
-		self.drawer = Drawer(self.configParser)
+		self.drawer = Drawer(self.configManager)
 
-		self.gameView = GameView(self.configParser, self.DISPLAYSURF, self.drawer, self.SIDEBARWIDTH)
+		self.gameView = GameView(self.configManager, self.DISPLAYSURF, self.drawer)
 
-		windowWidth	= int(self.configParser.get('UI', 'resolution_width'))
-
-		TOPLEFT = (windowWidth - self.SIDEBARWIDTH, 0)
-
-		self.sideBarView = SidebarView(self.configParser, self.DISPLAYSURF, self.drawer, self.SIDEBARWIDTH, TOPLEFT)
+		self.sideBarView = SidebarView(self.configManager, self.DISPLAYSURF, self.drawer)
 
 	def setupWindow(self):
-		windowHeight 		= int(self.configParser.get('UI', 'resolution_height'))
-		windowWidth			= int(self.configParser.get('UI', 'resolution_width'))
+		self.DISPLAYSURF	= pygame.display.set_mode(self.configManager.RESOLUTION)
 
-		if windowHeight < self.MINIMUMHEIGHT:
-			windowHeight = self.MINIMUMHEIGHT
-
-		if windowWidth < self.MINIMUMWIDTH:
-			windowWidth = self.MINIMUMWIDTH
-
-		self.DISPLAYSURF	= pygame.display.set_mode((windowWidth, windowHeight))
-
-		windowTitle			= self.configParser.get('Text', 'window_title')
+		windowTitle			= self.configManager.WINDOWTITLE
 
 		pygame.display.set_caption(windowTitle)
 

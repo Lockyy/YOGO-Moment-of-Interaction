@@ -4,14 +4,14 @@ import Colours
 
 class SidebarView(View.View):
 
-	def __init__(self, configParser, MAINDISPLAYSURF, drawer, SIDEBARWIDTH, TOPLEFT):
-		super(SidebarView, self).__init__(configParser, MAINDISPLAYSURF, drawer, SIDEBARWIDTH)
+	def __init__(self, configManager, MAINDISPLAYSURF, drawer):
+		super(SidebarView, self).__init__(configManager, MAINDISPLAYSURF, drawer)
 
-		self.TOPLEFT = TOPLEFT
+		self.TOPLEFT = (self.configManager.WINDOWWIDTH - self.configManager.SIDEBARWIDTH, 0)
 
-		self.HEIGHT = int(self.configParser.get('UI', 'resolution_height'))
+		self.HEIGHT = self.configManager.WINDOWHEIGHT
 
-		self.DISPLAYSURF = pygame.Surface((self.SIDEBARWIDTH, self.HEIGHT))
+		self.DISPLAYSURF = pygame.Surface((self.configManager.SIDEBARWIDTH, self.configManager.WINDOWHEIGHT))
 
 	def update(self, model):
 		colour = Colours.SIDEBARBACKGROUND

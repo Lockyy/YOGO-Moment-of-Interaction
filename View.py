@@ -3,11 +3,10 @@ from Drawer import Drawer
 
 class View(object):
 	
-	def __init__(self, configParser, MAINDISPLAYSURF, drawer, SIDEBARWIDTH):
-		self.configParser = configParser
+	def __init__(self, configManager, MAINDISPLAYSURF, drawer):
+		self.configManager = configManager
 		self.MAINDISPLAYSURF = MAINDISPLAYSURF
 		self.drawer = drawer
-		self.SIDEBARWIDTH = SIDEBARWIDTH
 
 	def update(self, model):
 		self.drawer.fill(self.MAINDISPLAYSURF)
