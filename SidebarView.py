@@ -17,4 +17,13 @@ class SidebarView(View.View):
 		colour = Colours.SIDEBARBACKGROUND
 		self.drawer.fill(self.DISPLAYSURF, colour)
 
+		self.drawMessages(model)
+
 		self.drawToMainDisplay()
+
+	def drawMessages(self, model):
+		focusCell = model.getFocusCell()
+
+		message = focusCell.name
+		self.drawer.drawText("Terrain:", self.DISPLAYSURF, (10, 10))
+		self.drawer.drawText(message, self.DISPLAYSURF, (10, 42))

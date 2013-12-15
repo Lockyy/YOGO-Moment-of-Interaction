@@ -25,16 +25,36 @@ class ViewController(object):
 
 		pygame.display.set_caption(windowTitle)
 
-	def updateView(self, model):
-		# Fill in the background
-		#self.drawer.fill(self.DISPLAYSURF)
+	def updateView(self, model, updateUI):
+		# Draw in the sidebar
+		if updateUI:
+			# Fill in the background
+			self.drawer.fill(self.DISPLAYSURF)
+			self.sideBarView.update(model)
 
 		# Draw the game world
 		self.gameView.update(model)
 
-		# Draw in the sidebar
-		self.sideBarView.update(model)
-
 		# Update the display
 		pygame.display.update()
 
+	def getGameViewRect(self):
+		gameViewLocation = self.gameView.TOPLEFT
+		gameViewRect = pygame.Rect(	gameViewLocation[0],\
+									gameViewLocation[1],\
+									self.configManager.WORLDDISPLAYWIDTH,\
+									self.configManager.WORLDDISPLAYHEIGHT)
+
+		return gameViewRect
+
+	def getClickedCell(self, (mousex, mousey)):
+		if not self.getGameViewRect().collidepoint((mousex, mousey)):
+			return False
+
+		mousex -= self.configManager.BORDERSIZE
+		mousey -= self.configManager.BORDERSIZE
+
+		cellx = mousex / self.configManager.CELLSIZE
+		celly = mousey / self.configManager.CELLSIZE
+
+		return (cellx, celly)
