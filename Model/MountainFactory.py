@@ -40,9 +40,7 @@ class MountainFactory(object):
 
 				# Get tile at new mountain co-ordinates.
 				newMountainTile = self.model.getCell(newMountainCoords)
-				# Try to add the mountain, if it's successful then set last mountain placed, the alignment of it's new tile
-				# and the amount of mountains placed.
-				
+				# Try to add the mountain. If it's successful then set last mountain placed and the amount of mountains placed.
 				if newMountainTile.land and not newMountainTile.mountain:
 					self.model.placeMountainCell(newMountainCoords)
 					lastMountainPlaced = newMountainCoords

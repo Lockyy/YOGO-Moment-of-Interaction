@@ -44,7 +44,7 @@ class ConfigManager(object):
 
 		self.WINDOWTITLE 	= self.configParser.get('Text', 'window_title')
 
-		# Seed the random number generator.
+		# The seed for the random number generator.
 		seed = self.configParser.get('World_Generation', 'seed')
 		
 		if seed == "None": 
@@ -52,54 +52,68 @@ class ConfigManager(object):
 		else:
 			self.WORLDGENSEED = int(seed)
 
+		# The game's FPS.
 		self.FPS = int(self.configParser.get('Game', 'fps'))
 
+		# Continent generation Values.
 		self.SPARKSCONSTANT = int(self.configParser.get('World_Generation', 'spark_constant'))
 		self.LANDPERCENTAGE = float(self.configParser.get('World_Generation', 'land_percentage')) / 100
 
-		self.FARMGRAINMIN = int(self.configParser.get('World_Generation', 'farm_grain_min'))
-		self.FARMGRAINMAX = int(self.configParser.get('World_Generation', 'farm_grain_max'))
-		self.FARMGRAINREGENMIN = int(self.configParser.get('World_Generation', 'farm_grain_regen_min'))
-		self.FARMGRAINREGENMAX = int(self.configParser.get('World_Generation', 'farm_grain_regen_max'))
-
-		self.PASTUREMEATMIN = int(self.configParser.get('World_Generation', 'pasture_meat_min'))
-		self.PASTUREMEATMAX = int(self.configParser.get('World_Generation', 'pasture_meat_max'))
-		self.PASTUREMEATREGENMIN = int(self.configParser.get('World_Generation', 'pasture_meat_regen_min'))
-		self.PASTUREMEATREGENMAX = int(self.configParser.get('World_Generation', 'pasture_meat_regen_max'))
-
-		self.GRASSLANDMEATMIN = int(self.configParser.get('World_Generation', 'grassland_meat_min'))
-		self.GRASSLANDMEATMAX = int(self.configParser.get('World_Generation', 'grassland_meat_max'))
-		self.GRASSLANDMEATREGENMIN = int(self.configParser.get('World_Generation', 'grassland_meat_regen_min'))
-		self.GRASSLANDMEATREGENMAX = int(self.configParser.get('World_Generation', 'grassland_meat_regen_max'))
-
+		# Mountain generation values.
 		self.MOUNTAINDIRECTIONCHANGECHANCE = int(self.configParser.get('World_Generation', 'mountain_direction_change_chance'))
 		self.MOUNTAINLENGTHMIN = int(self.configParser.get('World_Generation', 'mountain_length_min'))
 		self.MOUNTAINLENGTHMAX = int(self.configParser.get('World_Generation', 'mountain_length_max'))
 		self.MOUNTAINRANGECOUNT = int(self.configParser.get('World_Generation', 'mountain_range_count'))
-		self.MOUNTAINSTONEMIN = int(self.configParser.get('World_Generation', 'mountain_stone_min'))
-		self.MOUNTAINSTONEMAX = int(self.configParser.get('World_Generation', 'mountain_stone_max'))
-		self.MOUNTAINSTONEREGENMIN = int(self.configParser.get('World_Generation', 'mountain_stone_regen_min'))
-		self.MOUNTAINSTONEREGENMAX = int(self.configParser.get('World_Generation', 'mountain_stone_regen_max'))
 
+		# River generation values.
 		self.RIVERCOUNT = int(self.configParser.get('World_Generation', 'river_count'))
 		self.RIVERFISHMIN = int(self.configParser.get('World_Generation', 'river_fish_min'))
 		self.RIVERFISHMAX = int(self.configParser.get('World_Generation', 'river_fish_max'))
 		self.RIVERFISHREGENMIN = int(self.configParser.get('World_Generation', 'river_fish_regen_min'))
 		self.RIVERFISHREGENMAX = int(self.configParser.get('World_Generation', 'river_fish_regen_max'))
 
+		# Forest generation values.
+		self.FORESTCOUNT = int(self.configParser.get('World_Generation', 'forest_count'))
+		self.FORESTSIZEMIN = int(self.configParser.get('World_Generation', 'forest_size_min'))
+		self.FORESTSIZEMAX = int(self.configParser.get('World_Generation', 'forest_size_max'))
+
+		# Farm grain stats.
+		self.FARMGRAINMIN = int(self.configParser.get('World_Generation', 'farm_grain_min'))
+		self.FARMGRAINMAX = int(self.configParser.get('World_Generation', 'farm_grain_max'))
+		self.FARMGRAINREGENMIN = int(self.configParser.get('World_Generation', 'farm_grain_regen_min'))
+		self.FARMGRAINREGENMAX = int(self.configParser.get('World_Generation', 'farm_grain_regen_max'))
+
+		# Pasture meat stats.
+		self.PASTUREMEATMIN = int(self.configParser.get('World_Generation', 'pasture_meat_min'))
+		self.PASTUREMEATMAX = int(self.configParser.get('World_Generation', 'pasture_meat_max'))
+		self.PASTUREMEATREGENMIN = int(self.configParser.get('World_Generation', 'pasture_meat_regen_min'))
+		self.PASTUREMEATREGENMAX = int(self.configParser.get('World_Generation', 'pasture_meat_regen_max'))
+
+		# Grassland meat stats.
+		self.GRASSLANDMEATMIN = int(self.configParser.get('World_Generation', 'grassland_meat_min'))
+		self.GRASSLANDMEATMAX = int(self.configParser.get('World_Generation', 'grassland_meat_max'))
+		self.GRASSLANDMEATREGENMIN = int(self.configParser.get('World_Generation', 'grassland_meat_regen_min'))
+		self.GRASSLANDMEATREGENMAX = int(self.configParser.get('World_Generation', 'grassland_meat_regen_max'))
+
+		# Mountain stone stats.
+		self.MOUNTAINSTONEMIN = int(self.configParser.get('World_Generation', 'mountain_stone_min'))
+		self.MOUNTAINSTONEMAX = int(self.configParser.get('World_Generation', 'mountain_stone_max'))
+		self.MOUNTAINSTONEREGENMIN = int(self.configParser.get('World_Generation', 'mountain_stone_regen_min'))
+		self.MOUNTAINSTONEREGENMAX = int(self.configParser.get('World_Generation', 'mountain_stone_regen_max'))
+
+		# Lake fish stats.
 		self.LAKEFISHMIN = int(self.configParser.get('World_Generation', 'lake_fish_min'))
 		self.LAKEFISHMAX = int(self.configParser.get('World_Generation', 'lake_fish_max'))
 		self.LAKEFISHREGENMIN = int(self.configParser.get('World_Generation', 'lake_fish_regen_min'))
 		self.LAKEFISHREGENMAX = int(self.configParser.get('World_Generation', 'lake_fish_regen_max'))
 
-		self.FORESTCOUNT = int(self.configParser.get('World_Generation', 'forest_count'))
-		self.FORESTSIZEMIN = int(self.configParser.get('World_Generation', 'forest_size_min'))
-		self.FORESTSIZEMAX = int(self.configParser.get('World_Generation', 'forest_size_max'))
+		# Forest wood stats.
 		self.FORESTWOODMIN = int(self.configParser.get('World_Generation', 'forest_wood_min'))
 		self.FORESTWOODMAX = int(self.configParser.get('World_Generation', 'forest_wood_max'))
 		self.FORESTWOODREGENMIN = int(self.configParser.get('World_Generation', 'forest_wood_regen_min'))
 		self.FORESTWOODREGENMAX = int(self.configParser.get('World_Generation', 'forest_wood_regen_max'))
 
+		# Village population/resource values.
 		self.VILLAGEINITIALPOPULATION = int(self.configParser.get('World_Generation', 'village_initial_population'))
 		self.VILLAGECONSUMPTIONGRAIN = int(self.configParser.get('World_Generation', 'village_consumption_grain'))
 		self.VILLAGECONSUMPTIONPROTEIN = int(self.configParser.get('World_Generation', 'village_consumption_protein'))

@@ -18,11 +18,14 @@ class World(object):
 
 		self.landArea = 0
 
+		# The cell that the user has clicked. This cell's details are displayed in the sidebar.
+		# Also, when y is pressed this cell will become the village.
 		self.focusCell = (0, 0)
 
 		self.seed = self.configManager.WORLDGENSEED
 		random.seed(self.seed)
 		print "World generation started"
+		# Print the seed to the log file. People can recover it if they really want it that way.
 		print "World gen seed: " + str(self.seed)
 
 		self.world = self.newWorld()
@@ -40,6 +43,7 @@ class World(object):
 
 		self.placeForests(self.configManager.FORESTCOUNT)
 
+	# Advance world gen one step at a time.
 	def createWorldStep(self):
 		if self.worldGenStage == 1:
 			self.createContinents()
@@ -73,26 +77,28 @@ class World(object):
 		world = []
 		for x in xrange(self.worldCellWidth):
 			column = []
-			# Iterate through SCREENHEIGHT by CELLSIZE to get number of rows.
 			# Append item to column at each loop to create each cell's slot.
 			for y in xrange(self.worldCellHeight):
 				column.append(Cell.Cell(self.configManager))
-			# Append each column to the overall board.
+			# Append each column to the overall world.
 			world.append(column)
 
 		return world
 
+	# Create the continents factory and produce the continents.
 	def createContinents(self):
 		continentsFactory = ContinentsFactory.ContinentsFactory(self, self.configManager)
 
 		continentsFactory.createContinents()
 
+	# Create the mountain factory and produce the mountain ranges.
 	def placeMountainRanges(self, count):
 		mountainFactory = MountainFactory.MountainFactory(self, self.configManager)
 
 		for x in xrange(count):
 			mountainFactory.createMountainRange()
 
+	# Create the river factory and produce the rivers.
 	def placeRivers(self, count):
 		riverFactory = RiverFactory.RiverFactory(self, self.configManager)
 
@@ -103,17 +109,18 @@ class World(object):
 
 			riverFactory.createRiver(startPosition)
 
-	def placeForests(self, count):
-		forestFactory = ForestFactory.ForestFactory(self, self.configManager)
-
-		for x in xrange(count):
-			forestFactory.createForest()
-
 	def validRiverStartLocation(self, (x, y)):
 		cell = self.getCell((x, y))
 
 		if cell.mountain:
 			return True
+
+	# Create the forest factory and produce the forests.
+	def placeForests(self, count):
+		forestFactory = ForestFactory.ForestFactory(self, self.configManager)
+
+		for x in xrange(count):
+			forestFactory.createForest()
 
 	def getRandomCell(self):
 		x = random.randint(0, self.worldCellWidth - 1)
@@ -141,6 +148,7 @@ class World(object):
 	def getFocusCell(self):
 		return self.getCell(self.focusCell)
 
+	# Get whether a cell has changed since the last game window draw.
 	def setCellChanged(self, (x, y), YESNO = True):
 		self.getCell((x, y)).changed = YESNO
 
@@ -154,6 +162,7 @@ class World(object):
 
 		colour = cell.colour
 
+		# Keep track of whether the cell has changed colour or not.
 		if colour != cell.lastColourDisplayed or cell.changed == True:
 			cell.changed = True
 		else:
@@ -163,6 +172,8 @@ class World(object):
 
 		return colour
 
+	# Place the various tiles at the given location.
+	# Makes things far cleaner elsewhere to have a bunch of these methods here.
 	def placeGrasslandCell(self, (x, y)):
 		self.replaceCell((x, y), Cell.GrasslandCell(self.configManager))
 
@@ -193,6 +204,8 @@ class World(object):
 	def placeInitialVillage(self):
 		self.placeVillageCell(self.focusCell)
 
+	# Move forward a year.
+	# Not much happens in the Moment of Interaction world.
 	def advanceYear(self):
 		for x in xrange(0, self.worldCellWidth):
 			for y in xrange(0, self.worldCellHeight):

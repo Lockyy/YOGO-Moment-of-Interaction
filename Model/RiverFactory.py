@@ -7,7 +7,7 @@ class RiverFactory:
 		self.configManager = configManager
 		self.model = model
 
-	# Djikstra's algorithm
+	# A*/Djikstra's algorithm
 	def createRiver(self, start):
 		# The starting node's co-ordinates.
 		newNode = start

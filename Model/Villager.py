@@ -9,8 +9,7 @@ class Villager(object):
 	def getGender(self):
 		return random.randint(1, 2)
 
-	# Creates a new name using the clauses specified in the prefixes and suffixes
-	# in the data/names folder.
+	# Creates a new name using the names specified in the files in the data/names folder.
 	def getNewName(self, gender):
 		if gender == 1:
 			genderString = "female"

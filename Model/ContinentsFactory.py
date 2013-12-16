@@ -16,8 +16,10 @@ class ContinentsFactory(object):
 	# Uses modified sparks algorithm found at http://www.cartania.com/alexander/generation.html
 	def createContinents(self):
 		sparkConstant = self.configManager.SPARKSCONSTANT
+
 		# Generate list of sparks to be used for generation.
 		sparksList = []
+
 		# Generate sparks. Makes area of world / sparkConstant sparks. A higher spark constant creates chunkier
 		# landmasses.
 		for x in xrange(self.world.area / sparkConstant):
@@ -25,7 +27,7 @@ class ContinentsFactory(object):
 			y = randint(0, self.world.worldCellHeight - 1)
 			x = randint(0, self.world.worldCellWidth - 1)
 
-			# Set the tile to grassland, this is a new grassland biome so give it a new name.
+			# Set the tile to grassland.
 			self.world.placeGrasslandCell((x, y))
 			# Put this on the sparkslist.
 			sparksList.append((x,y))
@@ -33,8 +35,7 @@ class ContinentsFactory(object):
 			self.world.landArea += 1
 
 		# While there are still sparks in the list 
-		# and land area hasn't exceeded 5/8ths of the total land mass.
-		# This limit is really arbitrary and needs to be pulled out into the world gen config files.
+		# and land area hasn't exceeded it's max size as dictated by the config.ini
 		while len(sparksList) > 0 and self.world.landArea < self.world.area * self.configManager.LANDPERCENTAGE:
 			# Get a random spark from the spark list.
 			sparkCoordinates = random.choice(sparksList)
@@ -92,13 +93,13 @@ class ContinentsFactory(object):
 		self.cleanOceans()
 
 	def fillOceans(self):
-		# Once we've gone through the land creation, set everything that isn't land,
-		# into ocean.
+		# Once we've gone through the land creation turn everything that isn't land into ocean.
 		for x in xrange(0, self.world.worldCellWidth):
 			for y in xrange(0, self.world.worldCellHeight):
 				if self.world.getCell((x,y)).name == "Empty":
 					self.world.placeLakeCell((x, y))
 
+	# Remove the little bits of land dotted around in the ocean.
 	def cleanOceans(self):
 		for x in xrange(0, self.world.worldCellWidth):
 			for y in xrange(0, self.world.worldCellHeight):

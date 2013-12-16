@@ -39,15 +39,7 @@ class ViewController(object):
 		# Update the display
 		pygame.display.update()
 
-	def getGameViewRect(self):
-		gameViewLocation = self.gameView.TOPLEFT
-		gameViewRect = pygame.Rect(	gameViewLocation[0],\
-									gameViewLocation[1],\
-									self.configManager.WORLDDISPLAYWIDTH,\
-									self.configManager.WORLDDISPLAYHEIGHT)
-
-		return gameViewRect
-
+	# Get which cell has been clicked. For use with selecting cells.
 	def getClickedCell(self, (mousex, mousey)):
 		if not self.getGameViewRect().collidepoint((mousex, mousey)):
 			return False
@@ -59,3 +51,12 @@ class ViewController(object):
 		celly = mousey / self.configManager.CELLSIZE
 
 		return (cellx, celly)
+
+	def getGameViewRect(self):
+		gameViewLocation = self.gameView.TOPLEFT
+		gameViewRect = pygame.Rect(	gameViewLocation[0],\
+									gameViewLocation[1],\
+									self.configManager.WORLDDISPLAYWIDTH,\
+									self.configManager.WORLDDISPLAYHEIGHT)
+
+		return gameViewRect

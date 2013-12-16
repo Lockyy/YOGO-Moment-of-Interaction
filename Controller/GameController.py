@@ -10,11 +10,17 @@ from pygame.locals import *
 class GameController(object):
 	
 	def __init__(self):
+		# Make the configManager.
+		# The configManager means that all the settings are grabbed at once.
+		# This will prevent the settings being changed mid way through genereation/simulation and messing things up.
 		self.configManager = ConfigManager()
+
 		self.fpsClock = pygame.time.Clock()
 
+		# The view controller handles the two displaysurfaces that make up the game window.
 		self.viewController = ViewController(self.configManager)
 
+		# Creates a new Model and generates the world.
 		self.newGame()
 
 		# Amount of logic frames per second.
@@ -32,8 +38,8 @@ class GameController(object):
 		while True:
 			# Logic loop parameter.
 			loops = 0
-			# While enough past time has passed since the last logic update and while total consecutive logic loops
-			# is below MAX_FRAMESKIP.
+			# Seperate the game logic up from the game display. This means the slow update speed
+			# of the model updating doesn't harm our ability to look around the world.
 			while pygame.time.get_ticks() > nextGameTick and loops < self.MAX_FRAMESKIP:
 				self.updateModel()
 
@@ -67,6 +73,8 @@ class GameController(object):
 
 
 	def newGame(self):
+		# Push world generation along one stage at a time. After each stage we redraw the game window.
+		# This lets the player watch the world get generated.
 		self.model = Model(self.configManager)
 		self.updateView(self.model)
 		self.fpsClock.tick(self.configManager.FPS)

@@ -11,20 +11,18 @@ class ForestFactory(object):
 		self.model = model
 		self.configManager = configManager
 
-	# Creates a biome.
+	# Creates a forest.
 	def createForest(self):
 		# Place the first tile.
 		spark = self.createInitialSpark()
 
 		self.spreadForest(spark)
 
-	# Works out the size of the biome to be created.
+	# Works out the size of the forest to be created.
 	def getForestSize(self):
-		# Percentage max and min sizes of new biome.
 		minSize = self.configManager.FORESTSIZEMIN
 		maxSize = self.configManager.FORESTSIZEMAX
 
-		# Ensure that min/max size are actually percentages.
 		if minSize < 0:
 			minSize = 0
 		if maxSize < minSize:
@@ -44,20 +42,20 @@ class ForestFactory(object):
 
 		return initialSpark
 
-	# Gets a "valid" location for the initial spark of the new biome.
+	# Gets a "valid" location for the initial spark of the new forest.
 	def getValidInitialSpark(self):
 		# Get a random co-ordinate on the map.
 		spark = self.model.getRandomCell()
 
-		# Keep looking for a sparks tile until we find one that is compatible with this biome.
+		# Keep looking for a sparks tile until we find one that is compatible with this forest.
 		while not self.checkCompatibility(spark):
 			spark = self.model.getRandomCell()
 
 		return spark
 
-	# Spreads the biome around to create a nice sizeable biome.
+	# Spreads the forest around to create a nice sizeable forest.
 	def spreadForest(self, spark):
-		# Get the exact size of the new biome.
+		# Get the exact size of the new forest.
 		actualSize = self.getForestSize()
 
 		openList = closedList = [spark]
@@ -76,7 +74,7 @@ class ForestFactory(object):
 		for x in xrange(-1,2):
 			for y in xrange(-1,2):
 				adjacentTile = (spark[0] + x, spark[1] + y)
-				# Whether the adjacent tile is compatible with the new biome.
+				# Whether the adjacent tile is compatible with the new forest.
 				if not adjacentTile in openList and self.checkCompatibility(adjacentTile):
 					output.append(adjacentTile)
 		return output

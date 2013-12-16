@@ -7,12 +7,14 @@ class Drawer(object):
 		self.configManager = configManager
 		self.fontObjects = {}
 
+	# Fill the given DISPLAYSURFACE
 	def fill(self, DISPLAYSURF, colour = False):
 		if colour == False:
 			colour = Colours.GAMEBACKGROUND
 
 		DISPLAYSURF.fill(colour)
 
+	# Draw a cell at position (x, y) on the grid.
 	def drawCell(self, DISPLAYSURF, colour, (x, y)):
 		cellSize = self.configManager.CELLSIZE
 		
@@ -21,7 +23,6 @@ class Drawer(object):
 		pygame.draw.rect(DISPLAYSURF, colour, cellRect)
 
 	# Print message to co-ordinates xPixel, yPixel.
-	# Font size is also a parameter but if nothing is sent it defaults to 32.
 	def drawText(self, message, DISPLAYSURF, (xPixel, yPixel), colour = False, background = False, fontSize = 32):
 		if colour == False:
 			colour = Colours.TEXT
@@ -30,6 +31,7 @@ class Drawer(object):
 		if fontSize == False:
 			fontSize = 32
 
+		# Hold onto the font objects being created. Saves us time later.s
 		if fontSize in self.fontObjects:
 			fontObj = self.fontObjects[fontSize]
 		else:

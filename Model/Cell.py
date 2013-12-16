@@ -11,24 +11,35 @@ class Cell(object):
 
 		self.revertsTo		= self
 
+		# Whether buildings can be built here.
 		self.passable 		= False
+		# Whether farms can be build here.
 		self.farmable 		= False
+		# Whether the tile is land.
 		self.land			= True
+		# Whether the tile is a mountain or now.
 		self.mountain 		= False
+		# Wether the land has water.
 		self.water			= False
+		# Whether rivers can cut a path through this tile during their generation.
 		self.riverPassable	= True
+		# Whether the tile is fishable or not.
+		# Seperate from self.fish because a tile maybe fishable, but all the fish caught.
 		self.fishable		= False
+		# Whether a forest can go on this tile.
 		self.forestable		= False
 
 		self.lastColourDisplayed = False
 		self.changed = True
 
+		# Current total of each resource in the cell.
 		self.meat = 0
 		self.grain = 0
 		self.fish = 0
 		self.wood = 0
 		self.stone = 0
 
+		# min/max rate of regen for each resource.
 		self.minMeatRegen = 0
 		self.minGrainRegen = 0
 		self.minFishRegen = 0
@@ -40,6 +51,7 @@ class Cell(object):
 		self.maxWoodRegen = 0
 		self.maxStoneRegen = 0
 
+		# Upper limit on how much of each resource the tile can hold.
 		self.meatLimit = 0
 		self.grainLimit = 0
 		self.fishLimit = 0
@@ -53,6 +65,10 @@ class Cell(object):
 			return False
 
 	def regenResources(self):
+		# If the tile has less of a resource than it's max. 
+		# Get a random value between the min and max regen rates and add it to the total for that resource.
+		# Yes this can put it over the limit, it's on purpose.
+
 		if self.meat < self.meatLimit:
 			meat = randint(self.minMeatRegen, self.maxMeatRegen)
 			self.meat += meat
