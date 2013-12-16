@@ -267,15 +267,18 @@ class Village(object):
 							if self.world.getCell((cellX, cellY)).farmable:
 								validLocations.append((cellX, cellY))
 
-		location = random.choice(validLocations)
+		try:						
+			location = random.choice(validLocations)
 
-		self.world.placeFarmCell(location)
-		self.farms.append(location)
-		self.farmCount += 1
+			self.world.placeFarmCell(location)
+			self.farms.append(location)
+			self.farmCount += 1
 
-		self.consumeGrain(1)
-		self.consumeBuildingMaterials(1)
-		self.addToVillageLog("Farm built.")
+			self.consumeGrain(1)
+			self.consumeBuildingMaterials(1)
+			self.addToVillageLog("Farm built.")
+		except:
+			return
 
 	def buildPasture(self):
 		validLocations = []
@@ -298,16 +301,18 @@ class Village(object):
 							cellY = pasture[1] + y
 							if self.world.getCell((cellX, cellY)).farmable:
 								validLocations.append((cellX, cellY))
+		try:
+			location = random.choice(validLocations)
+			
+			self.world.placePastureCell(location)
+			self.pastures.append(location)
+			self.pastureCount += 1
 
-		location = random.choice(validLocations)
-		
-		self.world.placePastureCell(location)
-		self.pastures.append(location)
-		self.pastureCount += 1
-
-		self.consumeGrain(5)
-		self.consumeBuildingMaterials(10)
-		self.addToVillageLog("Pasture built.")
+			self.consumeGrain(5)
+			self.consumeBuildingMaterials(10)
+			self.addToVillageLog("Pasture built.")
+		except:
+			return
 
 	def buildVillage(self):
 		validLocations = []
@@ -331,14 +336,18 @@ class Village(object):
 							cellY = pasture[1] + y
 							if self.world.getCell((cellX, cellY)).farmable:
 								validLocations.append((cellX, cellY))
+		try:
+			location = random.choice(validLocations)
 
-		self.world.placeVillageCell(location)
-		self.villageCells.append(location)
-		self.villageCellCount += 1
+			self.world.placeVillageCell(location)
+			self.villageCells.append(location)
+			self.villageCellCount += 1
 
-		self.consumeGrain(10)
-		self.consumeBuildingMaterials(20)
-		self.addToVillageLog("Village hub built.")
+			self.consumeGrain(10)
+			self.consumeBuildingMaterials(20)
+			self.addToVillageLog("Village hub built.")
+		except: 
+			return
 
 	def buildingMaterials(self):
 		return self.wood + self.stone
