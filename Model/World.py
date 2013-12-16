@@ -1,14 +1,15 @@
-import Cell
 import random
 import time
+import Cell
 import MountainFactory
 import RiverFactory
 import ContinentsFactory
+import ForestFactory
 
-class Model(object):
+class World(object):
 
 	def __init__(self, configManager):
-		self.configManager 		= configManager
+		self.configManager = configManager
 
 		self.worldCellHeight	= self.configManager.WORLDDISPLAYHEIGHT / self.configManager.CELLSIZE
 		self.worldCellWidth		= self.configManager.WORLDDISPLAYWIDTH / self.configManager.CELLSIZE
@@ -17,27 +18,53 @@ class Model(object):
 
 		self.landArea = 0
 
-		self.createWorld()
-
 		self.focusCell = (0, 0)
 
-	def createWorld(self):
-		print "World generation started"
-
-		# Seed the random number generator.
 		self.seed = self.configManager.WORLDGENSEED
+		random.seed(self.seed)
+		print "World generation started"
 		print "World gen seed: " + str(self.seed)
 
-		random.seed(self.seed)
-
 		self.world = self.newWorld()
+		self.worldGenStage = 1
+		self.worldGenStageMessage = "land"
+		self.worldGenDone = False
+		self.year = 1
 
+	def createWorld(self):
 		self.createContinents()
 
 		self.placeMountainRanges(self.configManager.MOUNTAINRANGECOUNT)
 
 		self.placeRivers(self.configManager.RIVERCOUNT)
 
+		self.placeForests(self.configManager.FORESTCOUNT)
+
+	def createWorldStep(self):
+		if self.worldGenStage == 1:
+			self.createContinents()
+			self.worldGenStage += 1
+			self.worldGenStageMessage = "mountains"
+			return
+
+		if self.worldGenStage == 2:
+			self.placeMountainRanges(self.configManager.MOUNTAINRANGECOUNT)
+			self.worldGenStage += 1
+			self.worldGenStageMessage = "rivers"
+			return
+
+		if self.worldGenStage == 3:
+			self.placeRivers(self.configManager.RIVERCOUNT)
+			self.worldGenStage += 1
+			self.worldGenStageMessage = "forests"
+			return
+
+		if self.worldGenStage == 4:
+			self.placeForests(self.configManager.FORESTCOUNT)
+			self.worldGenStage += 1
+			self.worldGenStageMessage = "done"
+			self.worldGenDone = True
+			return
 
 	# Create the empty world.
 	# Every cell is a generic cell object.
@@ -49,7 +76,7 @@ class Model(object):
 			# Iterate through SCREENHEIGHT by CELLSIZE to get number of rows.
 			# Append item to column at each loop to create each cell's slot.
 			for y in xrange(self.worldCellHeight):
-				column.append(Cell.Cell())
+				column.append(Cell.Cell(self.configManager))
 			# Append each column to the overall board.
 			world.append(column)
 
@@ -75,6 +102,12 @@ class Model(object):
 				startPosition = self.getRandomCell()
 
 			riverFactory.createRiver(startPosition)
+
+	def placeForests(self, count):
+		forestFactory = ForestFactory.ForestFactory(self, self.configManager)
+
+		for x in xrange(count):
+			forestFactory.createForest()
 
 	def validRiverStartLocation(self, (x, y)):
 		cell = self.getCell((x, y))
@@ -129,3 +162,42 @@ class Model(object):
 		cell.lastColourDisplayed = colour
 
 		return colour
+
+	def placeGrasslandCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.GrasslandCell(self.configManager))
+
+	def placeDesertCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.DesertCell(self.configManager))
+
+	def placeMountainCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.MountainCell(self.configManager))
+
+	def placeRiverCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.RiverCell(self.configManager))
+
+	def placeLakeCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.LakeCell(self.configManager))
+
+	def placeForestCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.ForestCell(self.configManager))
+
+	def placeFarmCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.FarmCell(self.configManager))
+
+	def placeVillageCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.VillageCell(self.configManager))
+
+	def placePastureCell(self, (x, y)):
+		self.replaceCell((x, y), Cell.PastureCell(self.configManager))
+
+	def placeInitialVillage(self):
+		self.placeVillageCell(self.focusCell)
+
+	def advanceYear(self):
+		for x in xrange(0, self.worldCellWidth):
+			for y in xrange(0, self.worldCellHeight):
+				cell = self.getCell((x, y))
+
+				cell.regenResources()
+
+		self.year += 1

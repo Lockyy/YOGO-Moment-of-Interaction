@@ -6,11 +6,11 @@ from ConfigParser import SafeConfigParser
 
 class ContinentsFactory(object):
 	
-	def __init__(self, model, configManager):
-		self.model = model
+	def __init__(self, world, configManager):
+		self.world = world
 		self.configManager = configManager
 
-		random.seed(configManager.WORLDGENSEED)
+		random.seed(self.configManager.WORLDGENSEED)
 
 	# Creates continents.
 	# Uses modified sparks algorithm found at http://www.cartania.com/alexander/generation.html
@@ -20,25 +20,25 @@ class ContinentsFactory(object):
 		sparksList = []
 		# Generate sparks. Makes area of world / sparkConstant sparks. A higher spark constant creates chunkier
 		# landmasses.
-		for x in xrange(self.model.area / sparkConstant):
+		for x in xrange(self.world.area / sparkConstant):
 			# Create random co-ordinates for spark.
-			y = randint(0, self.model.worldCellHeight - 1)
-			x = randint(0, self.model.worldCellWidth - 1)
+			y = randint(0, self.world.worldCellHeight - 1)
+			x = randint(0, self.world.worldCellWidth - 1)
 
 			# Set the tile to grassland, this is a new grassland biome so give it a new name.
-			self.model.replaceCell((x, y), Cell.GrasslandCell())
+			self.world.placeGrasslandCell((x, y))
 			# Put this on the sparkslist.
 			sparksList.append((x,y))
 			# Increment the land area.
-			self.model.landArea += 1
+			self.world.landArea += 1
 
 		# While there are still sparks in the list 
 		# and land area hasn't exceeded 5/8ths of the total land mass.
 		# This limit is really arbitrary and needs to be pulled out into the world gen config files.
-		while len(sparksList) > 0 and self.model.landArea < self.model.area * self.configManager.LANDPERCENTAGE:
+		while len(sparksList) > 0 and self.world.landArea < self.world.area * self.configManager.LANDPERCENTAGE:
 			# Get a random spark from the spark list.
 			sparkCoordinates = random.choice(sparksList)
-			sparkTile = self.model.getCell(sparkCoordinates)
+			sparkTile = self.world.getCell(sparkCoordinates)
 			
 			# The repeatList stores which offsets have been used so far in the
 			# spread of the spark.
@@ -65,23 +65,23 @@ class ContinentsFactory(object):
 				newTileCoordinates = (sparkCoordinates[0] + x, sparkCoordinates[1] + y)
 
 				# Ensure we aren't out of bounds
-				if self.model.outOfBounds(newTileCoordinates):
+				if self.world.outOfBounds(newTileCoordinates):
 					continue
 
 				# Get the tile.
-				newTile = self.model.getCell(newTileCoordinates)
+				newTile = self.world.getCell(newTileCoordinates)
 				# Ensure the tile is inside the world.
 				if newTileCoordinates[0] < 0 or newTileCoordinates[1] < 0 \
-					or newTileCoordinates[0] > self.model.worldCellWidth or newTileCoordinates[1] > self.model.worldCellHeight:
+					or newTileCoordinates[0] > self.world.worldCellWidth or newTileCoordinates[1] > self.world.worldCellHeight:
 					pass
 				# If the tile is currently unassigned then spread sparkType to it,
 				# along with the sparkTile's name.
 				if newTile.name == "Empty":
-					self.model.replaceCell(newTileCoordinates, Cell.GrasslandCell())
+					self.world.placeGrasslandCell(newTileCoordinates)
 					# Add the new tile to the sparkslist.
 					sparksList.append(newTileCoordinates)
 					
-					self.model.landArea += 1
+					self.world.landArea += 1
 
 			# Remove the spark from the sparksList.
 			while sparkCoordinates in sparksList:
@@ -89,10 +89,26 @@ class ContinentsFactory(object):
 
 		self.fillOceans()
 
+		self.cleanOceans()
+
 	def fillOceans(self):
 		# Once we've gone through the land creation, set everything that isn't land,
 		# into ocean.
-		for x in xrange(0, self.model.worldCellWidth):
-			for y in xrange(0, self.model.worldCellHeight):
-				if self.model.getCell((x,y)).name == "Empty":
-					self.model.replaceCell((x, y), Cell.LakeCell())
+		for x in xrange(0, self.world.worldCellWidth):
+			for y in xrange(0, self.world.worldCellHeight):
+				if self.world.getCell((x,y)).name == "Empty":
+					self.world.placeLakeCell((x, y))
+
+	def cleanOceans(self):
+		for x in xrange(0, self.world.worldCellWidth):
+			for y in xrange(0, self.world.worldCellHeight):
+				if self.surroundedByOcean((x, y)):
+					self.world.placeLakeCell((x, y))
+
+	def surroundedByOcean(self, (x, y)):
+		for x in xrange(-1, 2):
+			for y in xrange(-1, 2):
+				if not self.world.getCell((x, y)).water:
+					return False
+
+		return True

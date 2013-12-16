@@ -1,7 +1,7 @@
 import profile
 import sys
-from Logger import Logger
-from GameController import GameController
+from Controller.Logger import Logger
+from Controller.GameController import GameController
 
 if __name__ == '__main__':
 	sys.stdout = Logger()

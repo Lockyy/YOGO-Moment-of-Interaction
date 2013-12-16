@@ -44,7 +44,7 @@ class MountainFactory(object):
 				# and the amount of mountains placed.
 				
 				if newMountainTile.land and not newMountainTile.mountain:
-					self.model.replaceCell(newMountainCoords, Cell.MountainCell())
+					self.model.placeMountainCell(newMountainCoords)
 					lastMountainPlaced = newMountainCoords
 					mountainsPlaced += 1
 
@@ -57,12 +57,13 @@ class MountainFactory(object):
 
 	def getActualRangeLength(self):
 		# Max size of mountain ranges.
+		minRangeLength = int(self.configManager.MOUNTAINLENGTHMIN)
 		maxRangeLength = int(self.configManager.MOUNTAINLENGTHMAX)
 
-		if maxRangeLength <= 0:
-			actualRangeLength = 0 
+		if minRangeLength >= maxRangeLength:
+			actualRangeLength = minRangeLength
 		else:
-			actualRangeLength = randint(0, maxRangeLength)
+			actualRangeLength = randint(minRangeLength, maxRangeLength)
 
 		return actualRangeLength
 
@@ -73,7 +74,7 @@ class MountainFactory(object):
 			firstMountain = [randint(0, self.model.worldCellWidth - 1), randint(0, self.model.worldCellHeight - 1)]
 			firstMountainTile = self.model.getCell(firstMountain)
 
-		self.model.replaceCell(firstMountain, Cell.MountainCell())
+		self.model.placeMountainCell(firstMountain)
 
 		return firstMountain
 

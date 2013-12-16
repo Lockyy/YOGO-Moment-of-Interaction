@@ -1,6 +1,6 @@
-import View
 import pygame
 import Colours
+import View
 
 class GameView(View.View):
 
@@ -13,10 +13,12 @@ class GameView(View.View):
 
 	def update(self, model):
 		colour = Colours.GAMEBACKGROUND
-		#self.drawer.fill(self.DISPLAYSURF, colour)
+		# self.drawer.fill(self.DISPLAYSURF, colour)
 
-		self.drawWorld(model)
-		self.drawFocusCellBox(model)
+		self.drawWorld(model)	
+
+		if model.world.worldGenDone:
+			self.drawFocusCellBox(model)
 
 		self.drawToMainDisplay()
 
@@ -24,19 +26,19 @@ class GameView(View.View):
 		BORDER = self.configManager.BORDERSIZE
 		CELLSIZE = self.configManager.CELLSIZE
 
-		for x in xrange(model.worldCellWidth):
-			for y in xrange(model.worldCellHeight):
-				colour = model.getCellColour((x, y))
+		for x in xrange(model.world.worldCellWidth):
+			for y in xrange(model.world.worldCellHeight):
+				colour = model.world.getCellColour((x, y))
 
 				location = ((CELLSIZE * x), (CELLSIZE * y))
 
-				if model.cellChanged((x, y)):
+				if model.world.cellChanged((x, y)):
 					self.drawer.drawCell(self.DISPLAYSURF, colour, location)
 
-				model.setCellChanged((x, y), False)
+				model.world.setCellChanged((x, y), False)
 
 	def drawFocusCellBox(self, model):
-		focusCell = model.focusCell
+		focusCell = model.world.focusCell
 
 		cellsize = self.configManager.CELLSIZE
 

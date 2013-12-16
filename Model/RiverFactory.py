@@ -50,17 +50,16 @@ class RiverFactory:
 
 					# If the tile is out of bounds then just ignore it.
 					if self.model.outOfBounds(newNode):
-						newNodeCell = Cell.OOBCell()
+						continue
 					else:
 						newNodeCell = self.model.getCell(newNode)
 
 					# Create new node from those co-ordinates.
 					newOpen = PathfindingNode.PathfindingNode(newNode, currentNode)
 
-
 					# If the tile isn't in the closed list, and is either settleable or is ocean.
 					# We include the ocean so we can actually find the ocean for the river to exit into.
-					if (newNodeCell.riverPassable or not newNodeCell.land or model.outOfBounds(newNode)) and not self.inList(newNode, closedList):
+					if (newNodeCell.riverPassable or not newNodeCell.land) and not self.inList(newNode, closedList):
 						if not self.inList(newNode, openList):
 							openList.append(newOpen)
 						else:
@@ -80,7 +79,7 @@ class RiverFactory:
 
 	def placeRiverTiles(self, path):
 		for node in path:
-			self.model.replaceCell(node.coords, Cell.RiverCell())
+			self.model.placeRiverCell(node.coords)
 
 	def getRiversPath(self, currentNode):
 		path = []

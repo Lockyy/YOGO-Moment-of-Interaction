@@ -1,7 +1,7 @@
 import pygame
-from Drawer import Drawer
-from GameView import GameView
-from SidebarView import SidebarView
+from View.Drawer import Drawer
+from View.GameView import GameView
+from View.SidebarView import SidebarView
 
 class ViewController(object):
 
@@ -14,23 +14,24 @@ class ViewController(object):
 
 		self.drawer = Drawer(self.configManager)
 
+		self.drawer.fill(self.DISPLAYSURF)
+
 		self.gameView = GameView(self.configManager, self.DISPLAYSURF, self.drawer)
 
 		self.sideBarView = SidebarView(self.configManager, self.DISPLAYSURF, self.drawer)
 
-	def setupWindow(self):
-		self.DISPLAYSURF	= pygame.display.set_mode(self.configManager.RESOLUTION)
+		pygame.display.update()
 
-		windowTitle			= self.configManager.WINDOWTITLE
+	def setupWindow(self):
+		windowTitle = self.configManager.WINDOWTITLE
 
 		pygame.display.set_caption(windowTitle)
 
-	def updateView(self, model, updateUI):
+		self.DISPLAYSURF = pygame.display.set_mode(self.configManager.RESOLUTION)
+
+	def updateView(self, model):
 		# Draw in the sidebar
-		if updateUI:
-			# Fill in the background
-			self.drawer.fill(self.DISPLAYSURF)
-			self.sideBarView.update(model)
+		self.sideBarView.update(model)
 
 		# Draw the game world
 		self.gameView.update(model)
